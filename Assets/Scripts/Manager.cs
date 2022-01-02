@@ -226,7 +226,7 @@ public class Manager : MonoBehaviour
 
     public void LoadMatchHistory()
     {
-        int amount = 5;
+        int amount = matchLabels.Length;
         var matches = RiotApi.GetMatches(amount);
 
         for (int i = 0; i < amount; i++)

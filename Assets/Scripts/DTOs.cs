@@ -56,6 +56,8 @@ public class ParticipantDTO : DTO
     public string puuid { get; set; }
     public int visionScore { get; set; }
     public bool win { get; set; }
+    public string lane { get; set; }
+    public string role { get; set; }
 }
 
 public class MatchInfo
