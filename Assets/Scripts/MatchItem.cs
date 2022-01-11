@@ -18,6 +18,7 @@ public class MatchItem : MonoBehaviour
     [Space]
 
     [SerializeField] LineRenderer playerStats;
+    [SerializeField] LineRenderer avgStats;
     [Space]
 
     [SerializeField] Text playerKills;
@@ -32,38 +33,19 @@ public class MatchItem : MonoBehaviour
     [SerializeField] Text gameLength;
     [Space]
 
-    /*
-    [SerializeField] SpriteRenderer lane;
-    [SerializeField] Sprite topIcon;
-    [SerializeField] Sprite jglIcon;
-    [SerializeField] Sprite midIcon;
-    [SerializeField] Sprite botIcon;
-    [SerializeField] Sprite suppIcon;
-    [Space]
-
-    [SerializeField] SpriteRenderer role;
-    [SerializeField] Sprite tankIcon;
-    [SerializeField] Sprite warriorIcon;
-    [SerializeField] Sprite assassinIcon;
-    [SerializeField] Sprite mageIcon;
-    [SerializeField] Sprite marksmanIcon;
-    [SerializeField] Sprite supportIcon;
-    [Space]
-    */
-
-
-    static readonly float killX = Mathf.Sin(330);
-    static readonly float killY = Mathf.Cos(330);
-    static readonly float deathX = Mathf.Sin(30);
-    static readonly float deathY = Mathf.Cos(30);
-    static readonly float assistX = Mathf.Sin(90);
-    static readonly float assistY = Mathf.Cos(90);
-    static readonly float minionsX = Mathf.Sin(150);
-    static readonly float minionsY = Mathf.Cos(150);
-    static readonly float goldX = Mathf.Sin(210);
-    static readonly float goldY = Mathf.Cos(210);
-    static readonly float visScoreX = Mathf.Sin(270);
-    static readonly float visScoreY = Mathf.Cos(270);
+    
+    static readonly float deathX = 0.5f;
+    static readonly float deathY = 0.866f;
+    static readonly float assistX = 1.0f;
+    static readonly float assistY = 0;
+    static readonly float minionsX = 0.5f;
+    static readonly float minionsY = -0.866f;
+    static readonly float goldX = -0.5f;
+    static readonly float goldY = -0.866f;
+    static readonly float visScoreX = -1.0f;
+    static readonly float visScoreY = 0.0f;
+    static readonly float killX = -0.5f;
+    static readonly float killY = 0.866f;
 
     Color redColor = new Color(0.5f, 0, 0);
     Color greenColor = new Color(0, 0.5f, 0);
@@ -109,7 +91,7 @@ public class MatchItem : MonoBehaviour
                 winTeamKills += p.kills;
                 winTeamAssists += p.assists;
                 winTeamDeaths += p.deaths;
-                winTeamMinions += p.totalMinionsKilled;
+                winTeamMinions += p.totalMinionsKilled + p.neutralMinionsKilled;
                 winTeamGold += p.goldEarned;
                 winTeamVisionScore += p.visionScore;
             }
@@ -118,7 +100,7 @@ public class MatchItem : MonoBehaviour
                 loseTeamKills += p.kills;
                 loseTeamAssists += p.assists;
                 loseTeamDeaths += p.deaths;
-                loseTeamMinions += p.totalMinionsKilled;
+                loseTeamMinions += p.totalMinionsKilled + p.neutralMinionsKilled;
                 loseTeamGold += p.goldEarned;
                 loseTeamVisionScore += p.visionScore;
             }
@@ -185,59 +167,44 @@ public class MatchItem : MonoBehaviour
         float avgGold = (winTeamGold + loseTeamGold) * 0.1f;
         float avgVisScore = (winTeamVisionScore + loseTeamVisionScore) * 0.1f;
 
+        avgKill = avgKill == 0 ? 1 : avgKill;
+        avgDeath = avgDeath == 0 ? 1 : avgDeath;
+        avgAssist = avgAssist == 0 ? 1 : avgAssist;
+        avgMinions = avgMinions == 0 ? 1 : avgMinions;
+        avgGold = avgGold == 0 ? 1 : avgGold;
+        avgVisScore = avgVisScore == 0 ? 1 : avgVisScore;
+
         float killRate = Mathf.Clamp(player.kills / avgKill, 0, 2);
         float deathRate = Mathf.Clamp(player.deaths / avgDeath, 0, 2);
         float assistRate = Mathf.Clamp(player.assists / avgAssist, 0, 2);
-        float minionsRate = Mathf.Clamp(player.totalMinionsKilled / avgMinions, 0, 2);
+        float minionsRate = Mathf.Clamp((player.totalMinionsKilled + player.neutralMinionsKilled) / avgMinions, 0, 2);
         float goldRate = Mathf.Clamp(player.goldEarned / avgGold, 0, 2);
         float visScoreRate = Mathf.Clamp(player.visionScore / avgVisScore, 0, 2);
 
         // Reverse death rate, since it's the only statistic where less means better
         deathRate = -deathRate + 2;
 
-        float killsStep = playerTeamKills == 0 ? 0 : (float)player.kills / playerTeamKills;
-        float deathsStep = playerTeamDeaths == 0 ? 0 : (float)player.deaths / playerTeamDeaths;
-        float assistsStep = playerTeamAssists == 0 ? 0 : (float)player.assists / playerTeamAssists;
-        float minionsStep = playerTeamMinions == 0 ? 0 : (float)player.totalMinionsKilled / playerTeamMinions;
-        float goldStep = playerTeamGold == 0 ? 0 : (float)player.goldEarned / playerTeamGold;
-        float visScoreStep = playerTeamVisionScore == 0 ? 0 : (float)player.visionScore / playerTeamVisionScore;
+        float killsStep = playerTeamKills == 0 ? 0 : (float)player.kills * 3 / playerTeamKills;
+        float deathsStep = playerTeamDeaths == 0 ? 0 : (float)player.deaths * 3 / playerTeamDeaths;
+        float assistsStep = playerTeamAssists == 0 ? 0 : (float)player.assists * 3 / playerTeamAssists;
+        float minionsStep = playerTeamMinions == 0 ? 0 : (float)(player.totalMinionsKilled * player.neutralMinionsKilled) * 3 / playerTeamMinions;
+        float goldStep = playerTeamGold == 0 ? 0 : (float)player.goldEarned * 3 / playerTeamGold;
+        float visScoreStep = playerTeamVisionScore == 0 ? 0 : (float)player.visionScore * 3 / playerTeamVisionScore;
 
         // Set positions of KDA radial graph
-        /*
-        playerKDA.SetPosition(0, 0.5f * killRate * new Vector3(killX, killY, 0));
-        playerKDA.SetPosition(1, 0.5f * deathRate * new Vector3(deathX, deathY, 0));
-        playerKDA.SetPosition(2, 0.5f * assistRate * new Vector3(assistX, assistY, 0));
-
-        // Set colors of KDA radial graph
-        Gradient gradientKDA = new Gradient();
-        GradientColorKey[] colorsKDA = new GradientColorKey[4];
-        GradientAlphaKey[] alphasKDA = new GradientAlphaKey[1];
-
-        float killsStep = playerTeamKills == 0 ? 0 : (float)player.kills / playerTeamKills;
-        float deathsStep = playerTeamDeaths == 0 ? 0 :-((float)player.deaths / playerTeamDeaths) + 1;
-        float assistsStep = playerTeamAssists == 0 ? 0 : (float)player.assists / playerTeamAssists;
-
-        colorsKDA[0].color = Color.Lerp(redColor, greenColor, killsStep);
-        colorsKDA[0].time = 0f;
-        colorsKDA[1].color = Color.Lerp(redColor, greenColor, deathsStep);
-        colorsKDA[1].time = 0.33f;
-        colorsKDA[2].color = Color.Lerp(redColor, greenColor, assistsStep);
-        colorsKDA[2].time = 0.66f;
-        colorsKDA[3].color = colorsKDA[0].color;
-        colorsKDA[3].time = 1f;
-
-        alphasKDA[0].alpha = 1f;
-        alphasKDA[0].time = 0f;
-
-        gradientKDA.SetKeys(colorsKDA, alphasKDA);
-        playerKDA.colorGradient = gradientKDA;
-        */
         playerStats.SetPosition(0, .5f * killRate * new Vector3(killX, killY, 0));
         playerStats.SetPosition(1, .5f * deathRate * new Vector3(deathX, deathY, 0));
         playerStats.SetPosition(2, .5f * assistRate * new Vector3(assistX, assistY, 0));
         playerStats.SetPosition(3, .5f * minionsRate * new Vector3(minionsX, minionsY, 0));
         playerStats.SetPosition(4, .5f * goldRate * new Vector3(goldX, goldY, 0));
         playerStats.SetPosition(5, .5f * visScoreRate * new Vector3(visScoreX, visScoreY, 0));
+
+        avgStats.SetPosition(0, .5f * new Vector3(killX, killY, 0));
+        avgStats.SetPosition(1, .5f * new Vector3(deathX, deathY, 0));
+        avgStats.SetPosition(2, .5f * new Vector3(assistX, assistY, 0));
+        avgStats.SetPosition(3, .5f * new Vector3(minionsX, minionsY, 0));
+        avgStats.SetPosition(4, .5f * new Vector3(goldX, goldY, 0));
+        avgStats.SetPosition(5, .5f * new Vector3(visScoreX, visScoreY, 0));
 
         Gradient gradient = new Gradient();
         GradientColorKey[] colors = new GradientColorKey[7];
@@ -253,7 +220,7 @@ public class MatchItem : MonoBehaviour
 
         colors[0].time = 0f;
         colors[1].time = 0.167f;
-        colors[2].time = 0.334f;
+        colors[2].time = 0.333f;
         colors[3].time = 0.5f;
         colors[4].time = 0.667f;
         colors[5].time = 0.834f;
@@ -271,15 +238,15 @@ public class MatchItem : MonoBehaviour
         playerKills.text = player.kills.ToString();
         playerDeaths.text = player.deaths.ToString();
         playerAssists.text = player.assists.ToString();
-        playerMinions.text = player.totalMinionsKilled.ToString();
+        playerMinions.text = (player.totalMinionsKilled + player.neutralMinionsKilled).ToString();
         playerGold.text = player.goldEarned.ToString();
         playerVisionScore.text = player.visionScore.ToString();
-        playerMinionsPerMin.text = (player.totalMinionsKilled / matchLengthMinFloat).ToString("0.0") + "\t\t/min";
+        playerMinionsPerMin.text = ((player.totalMinionsKilled + player.neutralMinionsKilled) / matchLengthMinFloat).ToString("0.0") + "\t\t\t/min";
         playerGoldPerMin.text = (player.goldEarned / matchLengthMinFloat).ToString("0.0") + "\t/min";
-        playerVisScorePerMin.text = (player.visionScore / matchLengthMinFloat).ToString("0.0") + "\t\t/min";
+        playerVisScorePerMin.text = (player.visionScore / matchLengthMinFloat).ToString("0.0") + "\t\t\t/min";
         gameLength.text = matchLengthMin.ToString() + ":" + matchLengthSec.ToString("00");
     }
-
+    
     public void OnMouseEnter()
     {
         gfxLayer.SetActive(false);

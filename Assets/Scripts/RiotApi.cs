@@ -223,6 +223,11 @@ public static class RiotApi
     {
         string entryPath = "/lol/league/v4/entries/by-summoner/" + encryptedSummonerId;
         var data = GetDTOsFromApi<LeagueEntryDTO>(entryPath);
+
+        foreach (var d in data)
+            if (d.queueType.Equals("RANKED_SOLO_5x5"))
+                return d;
+
         return data.FirstOrDefault();
     }
     static public MatchInfo[] GetMatches(int amount)

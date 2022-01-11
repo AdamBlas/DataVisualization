@@ -33,7 +33,7 @@ public class Manager : MonoBehaviour
     SummonerDTO player;
     ChampionDTO[] champs;
     ChampionMasteryDTO[] champsMastery;
-    float startY;
+    float startX;
 
 
     public void Start()
@@ -47,7 +47,7 @@ public class Manager : MonoBehaviour
         RiotApi.DownloadChampionSprites(champs);
         Destroy(maskRenderer);
 
-        startY = topChamps[0].transform.localPosition.y;
+        startX = topChamps[0].transform.localPosition.x;
 
         HideElements();
     }
@@ -102,9 +102,6 @@ public class Manager : MonoBehaviour
 
         switch (playerRank.tier)
         {
-            case "UNRANKED":
-                banner.SetUnranked();
-                break;
             case "IRON":
                 banner.SetIron(rank);
                 break;
@@ -131,6 +128,9 @@ public class Manager : MonoBehaviour
                 break;
             case "CHALLENGER":
                 banner.SetChallenger();
+                break;
+            default:
+                banner.SetUnranked();
                 break;
         }
 
@@ -162,16 +162,16 @@ public class Manager : MonoBehaviour
     IEnumerator MoveTopChampPortrait(TopChampIcon icon, float ratio)
     {
         // Set target
-        float targetY = startY + (maxOffset * ratio);
+        float targetX = startX - (maxOffset * ratio);
 
         // Save coords
-        float x = icon.transform.localPosition.x;
+        float y = icon.transform.localPosition.y;
         float z = icon.transform.localPosition.z;
-        icon.transform.localPosition = new Vector3(x, startY, z);
+        icon.transform.localPosition = new Vector3(startX, y, z);
 
         // Set line renderer
-        icon.lineRenderer.SetPosition(0, icon.transform.position - new Vector3(0, .5f, 0));
-        icon.lineRenderer.SetPosition(1, icon.transform.position - new Vector3(0, .5f, 0));
+        icon.lineRenderer.SetPosition(0, icon.transform.position);
+        icon.lineRenderer.SetPosition(1, icon.transform.position);
 
         float width = .85f;
         icon.lineRenderer.startWidth = width;
@@ -185,12 +185,12 @@ public class Manager : MonoBehaviour
         float i = 0;
         while (i < 1)
         {
-            icon.transform.localPosition = new Vector3(x, Mathf.Lerp(startY, targetY, (Mathf.Sqrt(i) + i) / 2), z);
+            icon.transform.localPosition = new Vector3(Mathf.Lerp(startX, targetX, (Mathf.Sqrt(i) + i) / 2), y, z);
             icon.lineRenderer.SetPosition(1, icon.transform.position);
             i += topChampsSpeed * Time.deltaTime;
             yield return null;
         }
-        icon.transform.localPosition = new Vector3(x, targetY, z);
+        icon.transform.localPosition = new Vector3(targetX, y, z);
     }
     Color[] GetDominantColors(Sprite sprite)
     {

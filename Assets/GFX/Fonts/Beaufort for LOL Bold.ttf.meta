@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fc03feb6709343449953b1babca2cd0d
+guid: 852faf8d020ce7842af54c5a0b8d2266
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,9 +9,8 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Friz Quadrata Std
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: a67cc4c4beefdc64f94bf39f3b6bcbcf, type: 3}
+  - BeaufortforLOL-Bold
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

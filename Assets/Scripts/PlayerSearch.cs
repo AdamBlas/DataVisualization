@@ -34,8 +34,8 @@ public class PlayerSearch : MonoBehaviour
     {
         while (transform.localPosition.x > showPosition.x)
         {
-            GetComponent<RectTransform>().anchoredPosition += (transform.localPosition - showPosition) * speed * Time.deltaTime;
-            transform.localPosition += (transform.localPosition - showPosition) * speed * Time.deltaTime;
+            Vector2 pos = new Vector2(transform.localPosition.x, transform.localPosition.y);
+            rect.anchoredPosition -= (pos - showPosition) * speed * Time.deltaTime;
             yield return null;
         }
         transform.localPosition = showPosition;
@@ -44,7 +44,8 @@ public class PlayerSearch : MonoBehaviour
     {
         while (transform.localPosition.x < hidePosition.x)
         {
-            transform.localPosition -= (transform.localPosition - hidePosition) * speed * Time.deltaTime;
+            Vector2 pos = new Vector2(transform.localPosition.x, transform.localPosition.y);
+            rect.anchoredPosition -= (pos - hidePosition) * speed * Time.deltaTime;
             yield return null;
         }
         transform.localPosition = hidePosition;

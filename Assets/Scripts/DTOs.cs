@@ -31,6 +31,7 @@ public class LeagueEntryDTO : DTO
     public string rank { get; set; }
     public int wins { get; set; }
     public int losses { get; set; }
+    public string queueType { get; set; }
 }
 
 public class MatchDTO : DTO
@@ -53,6 +54,7 @@ public class ParticipantDTO : DTO
     public int kills { get; set; }
     public int championId { get; set; }
     public int totalMinionsKilled { get; set; }
+    public int neutralMinionsKilled { get; set; }
     public string puuid { get; set; }
     public int visionScore { get; set; }
     public bool win { get; set; }
