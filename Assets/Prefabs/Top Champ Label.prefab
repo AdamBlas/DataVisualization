@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1508570581547935298}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1.4285713, y: 1.4285713, z: 1}
   m_Children:
   - {fileID: 8667543535877328231}
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 8550120814680390872}
   - component: {fileID: 8550120814680390873}
   - component: {fileID: 8550120814680390886}
+  - component: {fileID: 956125663668266571}
   m_Layer: 0
   m_Name: Top Champ Label
   m_TagString: Untagged
@@ -375,9 +376,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 704baface6f9883418e92e68a78b43de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreText: {fileID: 3283582091757766883}
   score: 0
   spriteRenderer: {fileID: 0}
   lineRenderer: {fileID: 0}
+  startColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!61 &8550120814680390886
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -404,3 +407,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 12, y: 1.3}
   m_EdgeRadius: 0
+--- !u!114 &956125663668266571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8550120814680390877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a878614ec5f9e44a27a98f413aca06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: Champion Maestry

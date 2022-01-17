@@ -33,6 +33,8 @@ public class MatchItem : MonoBehaviour
     [SerializeField] Text gameLength;
     [Space]
 
+    bool detailedLocked = false;
+
     
     static readonly float deathX = 0.5f;
     static readonly float deathY = 0.866f;
@@ -56,7 +58,8 @@ public class MatchItem : MonoBehaviour
 
     public void Start()
     {
-        OnMouseExit();
+        gfxLayer.SetActive(true);
+        preciseLayer.SetActive(false);
 
         if (!legendDone)
         {
@@ -223,7 +226,7 @@ public class MatchItem : MonoBehaviour
         GradientAlphaKey[] alphas = new GradientAlphaKey[1];
 
         colors[0].color = Color.Lerp(redColor, greenColor, killsStep);
-        colors[1].color = Color.Lerp(redColor, greenColor, deathsStep);
+        colors[1].color = Color.Lerp(greenColor, redColor, deathsStep);
         colors[2].color = Color.Lerp(redColor, greenColor, assistsStep);
         colors[3].color = Color.Lerp(redColor, greenColor, minionsStep);
         colors[4].color = Color.Lerp(redColor, greenColor, goldStep);
@@ -255,16 +258,10 @@ public class MatchItem : MonoBehaviour
         playerVisScorePerMin.text = (player.visionScore / matchLengthMinFloat).ToString("0.0") + "\t\t\t/min";
         gameLength.text = matchLengthMin.ToString() + ":" + matchLengthSec.ToString("00");
     }
-    
-    public void OnMouseEnter()
-    {
-        gfxLayer.SetActive(false);
-        preciseLayer.SetActive(true);
-    }
 
-    public void OnMouseExit()
+    public void OnMouseDown()
     {
-        gfxLayer.SetActive(true);
-        preciseLayer.SetActive(false);
+        gfxLayer.SetActive(!gfxLayer.activeSelf);
+        preciseLayer.SetActive(!preciseLayer.activeSelf);
     }
 }
