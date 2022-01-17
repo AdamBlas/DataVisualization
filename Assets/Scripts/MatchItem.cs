@@ -47,14 +47,26 @@ public class MatchItem : MonoBehaviour
     static readonly float killX = -0.5f;
     static readonly float killY = 0.866f;
 
-    Color redColor = new Color(0.5f, 0, 0);
-    Color greenColor = new Color(0, 0.5f, 0);
+    [SerializeField] Color redColor;
+    [SerializeField] Color greenColor;
+    [SerializeField] LineRenderer[] legendLines;
+    static bool legendDone = false;
 
     ParticipantDTO player = null;
 
     public void Start()
     {
         OnMouseExit();
+
+        if (!legendDone)
+        {
+            legendDone = true;
+            foreach (var lr in legendLines)
+            {
+                lr.startColor = redColor;
+                lr.endColor = greenColor;
+            }
+        }
     }
 
     public void SetGame(MatchInfo info)
@@ -218,13 +230,10 @@ public class MatchItem : MonoBehaviour
         colors[5].color = Color.Lerp(redColor, greenColor, visScoreStep);
         colors[6].color = colors[0].color;
 
-        colors[0].time = 0f;
-        colors[1].time = 0.167f;
-        colors[2].time = 0.333f;
-        colors[3].time = 0.5f;
-        colors[4].time = 0.667f;
-        colors[5].time = 0.834f;
-        colors[6].time = 1f;
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i].time = (float)i / colors.Length;
+        }
 
         alphas[0].alpha = 1f;
         alphas[0].time = 0f;

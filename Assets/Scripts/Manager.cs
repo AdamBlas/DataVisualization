@@ -150,6 +150,7 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < topChamps.Length; i++)
         {
+            topChamps[i].lineRenderer.useWorldSpace = true;
             topChamps[i].gameObject.SetActive(true);
             RiotApi.champsPortraits.TryGetValue(champsMastery[i].championId, out Sprite sprite);
             topChamps[i].score = champsMastery[i].championPoints;
