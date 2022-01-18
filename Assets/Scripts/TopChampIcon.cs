@@ -8,8 +8,6 @@ public class TopChampIcon : MonoBehaviour
 {
     public static Text label;
     [SerializeField] Text scoreText;
-    public int score;
-    string topX = string.Empty;
 
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public LineRenderer lineRenderer;
@@ -19,16 +17,16 @@ public class TopChampIcon : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         lineRenderer = GetComponent<LineRenderer>();
+        scoreText.enabled = false;
     }
 
     public void InitScore(int score, int topScore)
     {
-        this.score = score;
-        scoreText.text = (score / 1000).ToString() + "k";
+        scoreText.text = score.ToString() + "pts";
 
         float scoreDependent = (float)score / topScore;
 
-        if (scoreDependent < 0.2f)
+        if (scoreDependent < 0.35f)
         {
             scoreText.transform.position += new Vector3(-4, 0, 0);
             scoreText.alignment = TextAnchor.MiddleRight;
@@ -37,14 +35,11 @@ public class TopChampIcon : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (string.IsNullOrWhiteSpace(topX))
-            topX = label.text;
-
-        label.text = score.ToString() + " pts";
+        scoreText.enabled = true;
     }
 
     private void OnMouseExit()
     {
-        label.text = topX;
+        scoreText.enabled = false;
     }
 }
