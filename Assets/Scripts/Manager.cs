@@ -252,7 +252,6 @@ public class Manager : MonoBehaviour
         foreach (var icon in topChamps)
             icon.gameObject.SetActive(false);
         topChampsLabel.enabled = false;
-        TopChampIcon.label = topChampsLabel;
 
         // Rank banner
         banner.gameObject.SetActive(false);

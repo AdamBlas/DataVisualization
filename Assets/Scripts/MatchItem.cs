@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class MatchItem : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer champIcon;
-    [SerializeField] SpriteRenderer glowSprite;
-    [SerializeField] SpriteRenderer winLoseSprite;
+    [SerializeField] Image champIcon;
+    [SerializeField] Image glowSprite;
+    [SerializeField] Image winLoseSprite;
     [SerializeField] Color winColor;
     [SerializeField] Color loseColor;
     [Space]
@@ -60,13 +60,8 @@ public class MatchItem : MonoBehaviour
     public float goldRate { get; private set; }
     public float visionScoreRate { get; private set; }
 
-
     ParticipantDTO player = null;
 
-    public void Start()
-    {
-
-    }
 
     public void SetGame(MatchInfo info)
     {

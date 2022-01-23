@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class TopChampIcon : MonoBehaviour
 {
-    public static Text label;
+
     [SerializeField] Text scoreText;
 
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public LineRenderer lineRenderer;
     [HideInInspector] public Color startColor;
+
+    string hoverText;
 
     public void Awake()
     {

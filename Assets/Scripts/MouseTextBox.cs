@@ -24,7 +24,7 @@ public class MouseTextBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        t.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0.6f, 0, 1);
+        t.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(1, 0, 1);
     }
 
     public static void SetText(string text)
